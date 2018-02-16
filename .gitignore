@@ -1,0 +1,13 @@
+.env
+node_modules
+node_modules.zip
+.serverless
+package/
+.idea/
+.DS_Store
+coverage
+.nyc_output/
+package-lock.json
+yarn-error.log
+event.json
+.npmrc

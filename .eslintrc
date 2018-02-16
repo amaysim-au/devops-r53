@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "@amaysim/eslint-config-amaysim"
+  ],
+  "env": {
+    "node": true
+  }
+}
