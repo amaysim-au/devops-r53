@@ -1,0 +1,18 @@
+version: '3'
+services:
+  serverless:
+    image: amaysim/serverless:1.23.0
+    env_file: .env
+    volumes:
+      - ~/.aws:/root/.aws:Z
+      - .:/opt/app:Z
+      - ~/.yarn-cache:/usr/local/share/.cache/yarn/v1:Z
+  lambda:
+    image: lambci/lambda:nodejs6.10
+    env_file: .env
+    volumes:
+      - ./package/package:/var/task:Z
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://127.0.0.1:12201"

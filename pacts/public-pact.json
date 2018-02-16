@@ -1,0 +1,44 @@
+{
+  "consumer": {
+    "name": "devops-r53-frontend"
+  },
+  "provider": {
+    "name": "devops-r53"
+  },
+  "interactions": [
+    {
+      "description": "greeting the api",
+      "providerState": "Greetings",
+      "request": {
+        "method": "GET",
+        "path": "/greet"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "access_token": "text/html; charset=utf-8"
+        },
+        "body": [
+          {
+            "valid": "Hello World"
+          }
+        ],
+        "matchingRules": {
+          "$.body": {
+            "min": 1
+          },
+          "$.body[*].valid": {
+            "match": "regex",
+            "regex": "Hello World"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

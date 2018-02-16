@@ -1,0 +1,112 @@
+service: MV-${env:REALM}-Devops-r53
+package:
+    artifact: package/package.zip
+provider:
+  name: aws
+  runtime: nodejs6.10
+  memorySize: 256
+  timeout: 10
+  versionFunctions: false
+  deploymentBucket:
+    name: amaysim-serverless-deployments-${env:AWS_ACCOUNT_ID}-${env:AWS_REGION}
+  environment:
+    ENV: ${env:ENV}
+    REALM: ${env:REALM}
+    IDP_URL: ${env:IDP_URL}
+    IDP_UID: ${env:IDP_UID}
+    IDP_SECRET: ${env:IDP_SECRET}
+    DOMAIN_NAME: ${env:DOMAIN_NAME}
+    BASE_PATH: ${env:BASE_PATH}
+  vpc:
+    securityGroupIds:
+      - 'Fn::ImportValue': 'vpc-sg-defaultLambda'
+      - 'Fn::ImportValue': 'vpc-sg-mvAccess'
+    subnetIds:
+      - 'Fn::ImportValue': "${env:SUBNET_A}"
+      - 'Fn::ImportValue': "${env:SUBNET_B}"
+      - 'Fn::ImportValue': "${env:SUBNET_C}"
+  region: ${env:AWS_REGION}
+  stage: ${env:ENV}
+
+#plugins:
+#  - serverless-log-forwarding
+#  - serverless-plugin-aws-alerts
+  - serverless-offline
+
+custom:
+  logForwarding:
+    destinationARN: {"Fn::ImportValue": "${env:SUMOLOGIC_LAMBDA_ARN_EXPORT_NAME}"}
+  alerts:
+    dashboards: true
+    topics:
+      ok: ${env:OPS_GENIE_SNS_ARN}
+      alarm: ${env:OPS_GENIE_SNS_ARN}
+      insufficientData: ${env:OPS_GENIE_SNS_ARN}
+    definitions:
+      functionErrors:
+        threshold: 10
+        period: 900
+      functionDuration:
+        threshold: 60000
+        statistic: 'p95'
+        period: 900
+    alarms:
+      - functionErrors
+      - functionThrottles
+      - functionInvocations
+      - functionDuration
+  serverless-offline:
+    prefix: ${env:BASE_PATH}
+    babelOptions:
+      presets: ["es2015"]
+
+functions:
+  greetIndex:
+    handler: src/index.handler
+ #   events:
+ #     - http:
+ #         path: /greet
+ #         method: get
+ #         cors: true
+
+#resources:
+#  Resources:
+#    DomainName:
+#      Type: "AWS::ApiGateway::DomainName"
+#      Properties:
+#        CertificateArn: ${env:AWS_ACM_CERTIFICATE}
+#        DomainName: ${env:DOMAIN_NAME}
+#    BasePathMapping:
+#      Type: "AWS::ApiGateway::BasePathMapping"
+#      Properties:
+#        BasePath: ${env:BASE_PATH}
+#        DomainName:
+#          Ref: DomainName
+#        RestApiId: { "Ref": "ApiGatewayRestApi" }
+#        Stage: ${env:ENV}
+#    RecordSet:
+#      Type: AWS::Route53::RecordSet
+#      Properties:
+#        HostedZoneName: ${env:AWS_HOSTED_ZONE}.
+#        Name: ${env:DOMAIN_NAME}
+#        Type: A
+#        AliasTarget:
+#          HostedZoneId: "Z2FDTNDATAQYW2"
+#          DNSName:
+#            Fn::GetAtt: [ "DomainName", "DistributionDomainName" ]
+#    RecordSetAAAA:
+#      Type: AWS::Route53::RecordSet
+#      Properties:
+#        HostedZoneName: ${env:AWS_HOSTED_ZONE}.
+#        Name: ${env:DOMAIN_NAME}
+#        Type: AAAA
+#        AliasTarget:
+#          HostedZoneId: "Z2FDTNDATAQYW2"
+#          DNSName:
+#            Fn::GetAtt: [ "DomainName", "DistributionDomainName" ]
+#  Outputs:
+#    LambdaUrl:
+#      Value: "https://${env:DOMAIN_NAME}"
+#    CloudFrontDomainName:
+#      Value:
+#        Fn::GetAtt: [ 'DomainName', 'DistributionDomainName' ]

@@ -1,0 +1,29 @@
+{
+    "Authorization": "565dd1b0c3acc885b6a89e6232bf2b9d1234ba64fbc6755940bca267c6c03474",
+    "token_type": "bearer",
+    "expires_in": 2100,
+    "created_at": 1507007900,
+    "resource_owner": {
+        "id": "ecb0a881-e064-1234-8b09-748bc19d913f",
+        "type": "users",
+        "links": {
+            "self": "/users/ecb0a881-e064-1234-8b09-748bc19d913f"
+        },
+        "attributes": {
+            "admin": false,
+            "last_logged_in_msn": "0412345678",
+            "created_at": "2016-11-29T01:24:34.659Z",
+            "updated_at": "2017-10-03T05:18:20.695Z",
+            "mobile_customer_id": "123",
+            "broadband_customer_id": "345"
+        },
+        "relationships": {
+            "customer": {
+                "links": {
+                    "self": "/users/ecb0a881-e064-1234-8b09-748bc19d913f/relationships/customer",
+                    "related": "/users/ecb0a881-e064-1234-8b09-748bc19d913f/customer"
+                }
+            }
+        }
+    }
+}
