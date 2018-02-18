@@ -98,11 +98,10 @@ _testSystem:
 	./node_modules/mocha/bin/mocha --compilers js:babel-register --recursive test/system
 	./node_modules/eslint/bin/eslint.js src
 
-# _build transcompiles the src folder using Babel, installs nodejs production modules, and creates a package ready for Serverless Framework.
+# _build installs nodejs production modules, and creates a package ready for Serverless Framework.
 _build:
 	mkdir -p $(PACKAGE_DIR)/node_modules
 	cp package.json $(PACKAGE_DIR)/
-	./node_modules/eslint/bin/eslint.js --ext .js src
 	echo $(PACKAGE_DIR)/src
 	cp -r src $(PACKAGE_DIR)/src
 	./node_modules/babel-cli/bin/babel.js src -d $(PACKAGE_DIR)/src
