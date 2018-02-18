@@ -1,13 +1,14 @@
 var AWS = require('aws-sdk'); var async = require('async'); exports.handler = function (event, context) {
+  console.log(JSON.stringify(event))
   var asg_msg = JSON.parse(event.Records[0].Sns.Message);
   var asg_name = asg_msg.AutoScalingGroupName;
   //var instance_id = asg_msg.EC2InstanceId;
   var asg_event = asg_msg.Event;
   console.log(asg_event);
   if (asg_event === "autoscaling:EC2_INSTANCE_LAUNCH" || asg_event === "autoscaling:EC2_INSTANCE_TERMINATE") {
-    console.log("Handling Launch/Terminate Event for " + asg_name);
-    var autoscaling = new AWS.AutoScaling({region: 'us-east-1'});
-    var ec2 = new AWS.EC2({region: 'us-east-1'});
+    console.log("Handling Launch/Terminate Event for " + process.env.AWS_REGION);
+    var autoscaling = new AWS.AutoScaling({region: process.env.AWS_REGION});
+    var ec2 = new AWS.EC2({region: process.env.AWS_REGION});
     var route53 = new AWS.Route53();
     async.waterfall([
       function describeTags(next) {
