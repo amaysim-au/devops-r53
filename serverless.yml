@@ -17,21 +17,32 @@ provider:
     IDP_SECRET: ${env:IDP_SECRET}
     DOMAIN_NAME: ${env:DOMAIN_NAME}
     BASE_PATH: ${env:BASE_PATH}
-  vpc:
-    securityGroupIds:
-      - 'Fn::ImportValue': 'vpc-sg-defaultLambda'
-      - 'Fn::ImportValue': 'vpc-sg-mvAccess'
-    subnetIds:
-      - 'Fn::ImportValue': "${env:SUBNET_A}"
-      - 'Fn::ImportValue': "${env:SUBNET_B}"
-      - 'Fn::ImportValue': "${env:SUBNET_C}"
   region: ${env:AWS_REGION}
   stage: ${env:ENV}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - route53:ChangeResourceRecordSets
+      Resource:
+        - "arn:aws:route53:::hostedzone/*"
+    - Effect: Allow
+      Action:
+        - route53:GetHostedZone
+      Resource:
+        - "*"
+    - Effect: Allow
+      Action:
+        - ec2:Read*
+        - ec2:List*
+        - ec2:Describe*
+        - autoscaling:Describe*
+      Resource:
+        - "*"
 
 #plugins:
 #  - serverless-log-forwarding
 #  - serverless-plugin-aws-alerts
-  - serverless-offline
+#  - serverless-offline
 
 custom:
   logForwarding:
