@@ -28,17 +28,18 @@
     "mocha": "^3.2.0",
     "nyc": "^11.0.3",
     "pact": "^2.7.0",
+    "serverless-log-forwarding": "1.1.0",
+    "serverless-offline": "^3.16.0",
+    "serverless-plugin-aws-alerts": "^1.2.4",
     "serverless-webpack": "^1.0.0-rc.4",
     "sinon": "^2.3.8",
     "superagent": "^3.5.2",
     "webpack": "^3.0.0",
-    "webpack-node-externals": "^1.6.0",
-    "serverless-plugin-aws-alerts": "^1.2.4",
-    "serverless-log-forwarding": "1.1.0",
-    "serverless-offline": "^3.16.0"
+    "webpack-node-externals": "^1.6.0"
   },
   "dependencies": {
     "@amaysim/lambda-utils": "^1.0.3",
+    "async": "^2.6.0",
     "babel-register": "^6.24.1",
     "babel-runtime": "^6.23.0",
     "bunyan": "^1.8.12",
